@@ -1,0 +1,36 @@
+\newcommand{\imageaspage}[1]{
+	\begingroup
+	\thispagestyle{empty}
+	\parindent 0pt
+		
+	\newdimen\LeftMargin
+	\LeftMargin=-1in
+	\ifodd\thepage
+		\advance\LeftMargin by -\oddsidemargin
+	\else
+		\advance\LeftMargin by -\evensidemargin
+	\fi
+		
+	% margines górny
+	\newdimen\TopMargin
+	\TopMargin=-\paperheight
+
+	\advance\TopMargin by 1in 
+	\advance\TopMargin by \topmargin
+	\advance\TopMargin by \headheight
+	\advance\TopMargin by \headsep
+
+	\advance\TopMargin by \baselineskip
+	\setbox0=\hbox{pyjg}
+	\advance\TopMargin by -\dp0
+
+	% konwersja przesuniêæ na scaled points (\put)
+	\count0=\LeftMargin
+	\count1=\TopMargin
+
+	\setlength{\unitlength}{1sp}%
+	\begin{picture}(0,0)
+		\put(\count0,\count1){\includegraphics[width=\paperwidth,height=\paperheight]{#1}}
+	\end{picture}
+	\endgroup}
+	%\newpage}
