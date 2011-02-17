@@ -1,0 +1,55 @@
+%
+% Author  : Wojciech Mu³a
+% e-mail  : wojciech_mula@poczta.onet.pl
+% www     : http://www.0x80.pl
+% license : public domain
+%
+% This packages defines two commands:
+%
+% 1. \deferredfootnote[number]{text}
+% 2. \deferredfootnotemark[number]
+%
+% First commands defines footnote text and assigns one to the given
+% number. Second command makes footnote with n-th text note.
+%
+% This allows to place text of footnotes anywhere in manuscript,
+% for example all at the end of source file.
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{deferredfootnotes}[2011/02/13 define footnotes texts anywhere in document source]
+
+\AtBeginDocument{
+% read definitions saved in a first pass
+\InputIfFileExists{deferred.aux}{}{}
+
+% open file for writing
+\newwrite\deferredfile
+\immediate\openout\deferredfile=deferred.aux%
+
+% public function
+% #1 = number
+% #2 = footnote text
+%
+% usage: \deferredfootnote[number]{some text}
+\long\def\deferredfootnote[#1]#2{%
+	\immediate{\write\deferredfile{\noexpand\long\def\expandafter\noexpand\csname deferred\romannumeral #1\endcsname{#2}}}%
+}
+
+% public function
+% #1 = number
+%
+% usage: \deferredfootnotemark[number]
+\def\deferredfootnotemark[#1]{%
+	\expandafter \ifx \csname deferred\romannumeral #1\endcsname \relax%
+		\footnotemark[#1]% brak przypisu o wskazanym numerze
+	\else%
+		\footnote[#1]{\csname deferred\romannumeral #1\endcsname}%
+	\fi%
+}%
+}% AtBeginDocument
+
+\AtEndDocument{%
+	\closeout\deferredfile%
+}
+
+\endinput
