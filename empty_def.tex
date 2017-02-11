@@ -1,0 +1,17 @@
+\def\cond#1#2#3{%
+	\edef\tempa{#1}
+	\def\tempb{}
+	\ifx\tempa\tempb#3\else#2\fi
+}
+
+\def\Title{Why \TeX\ is the best}
+\def\Author{me}
+\def\www{}
+
+\cond \Title {{\bf\Title}}{Error, no title}
+
+\cond \Author {Author: \Author}{Author is unknown}
+
+\cond \www {WWW: \www}{No WWW page suppiled}
+
+\end
